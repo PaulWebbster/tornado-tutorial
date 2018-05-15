@@ -1,11 +1,8 @@
-from urllib.parse import urlencode
 from http.cookiejar import CookieJar
-from urllib.request import build_opener
-from urllib.request import HTTPRedirectHandler, HTTPHandler, HTTPSHandler, HTTPCookieProcessor
-
 from multiprocessing import Process
-
-import time
+from urllib.parse import urlencode
+from urllib.request import HTTPRedirectHandler, HTTPHandler, HTTPSHandler, HTTPCookieProcessor
+from urllib.request import build_opener
 
 from authentication import main
 
