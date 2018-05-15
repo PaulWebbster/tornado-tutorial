@@ -13,10 +13,12 @@ class MyApplication(tornado.web.Application):
         handlers = [
             (r"/", MainHandler),
             (r"/auth/login", LoginHandler),
+            (r"/auth/logout", LogoutHandler)
         ]
         settings = dict(
             cookie_secret="huisa7623eb,fdsbu73rjanfjbasdufy8sd",
-            template_path=os.path.join(os.path.dirname(__file__), "templates")
+            template_path=os.path.join(os.path.dirname(__file__), "templates"),
+            login_url="/auth/login"
         )
         super(MyApplication, self).__init__(handlers, **settings)
 
@@ -27,9 +29,8 @@ class BaseHandler(tornado.web.RequestHandler):
 
 
 class MainHandler(BaseHandler):
+    @tornado.web.authenticated
     def get(self):
-        if not self.current_user:
-            self.redirect("auth/login")
         name = tornado.escape.xhtml_escape(self.current_user)
         self.write("Hello, " + name)
 
@@ -47,6 +48,13 @@ class LoginHandler(BaseHandler):
         else:
             self.render('login.html', error="Error: incorrect password or username")
 
+
+class LogoutHandler(BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        name = tornado.escape.xhtml_escape(self.current_user)
+        self.clear_cookie("user")
+        self.write("{} you log out".format(name))
 
 def main():
     application = tornado.httpserver.HTTPServer(MyApplication())
