@@ -12,7 +12,7 @@ class MyApplication(tornado.web.Application):
     def __init__(self):
         handlers = [
             (r"/", MainHandler),
-            (r"/login", LoginHandler),
+            (r"/auth/login", LoginHandler),
         ]
         settings = dict(
             cookie_secret="huisa7623eb,fdsbu73rjanfjbasdufy8sd",
@@ -29,7 +29,7 @@ class BaseHandler(tornado.web.RequestHandler):
 class MainHandler(BaseHandler):
     def get(self):
         if not self.current_user:
-            self.redirect("login")
+            self.redirect("auth/login")
         name = tornado.escape.xhtml_escape(self.current_user)
         self.write("Hello, " + name)
 

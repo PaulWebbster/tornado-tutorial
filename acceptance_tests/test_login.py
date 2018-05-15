@@ -12,7 +12,8 @@ from authentication import main
 
 class TestLogin:
 
-    url = "http://localhost:8888/login"
+    main_url = "http://localhost:8888"
+    login_url = "http://localhost:8888/auth/login"
     correct_values = dict(
         name="pawel",
         password="pkbcilwl"
@@ -38,12 +39,12 @@ class TestLogin:
 
     def test_correct_user_can_log_in(self):
         data = urlencode(self.correct_values).encode('utf-8')
-        response = self.opener.open(self.url, data)
+        response = self.opener.open(self.login_url, data)
         assert "Hello, pawel".encode('utf-8') in response.read()
         assert len(self.cookies) == 1
 
     def test_incorrect_user_cannot_log_in(self):
         data = urlencode(self.incorrect_values).encode('utf-8')
-        response = self.opener.open(self.url, data)
+        response = self.opener.open(self.login_url, data)
         assert "incorrect password or username".encode('utf-8') in response.read()
         assert len(self.cookies) == 0
